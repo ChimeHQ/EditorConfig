@@ -13,18 +13,25 @@ public struct Parser {
 		let lines = input.split(whereSeparator: \.isNewline)
 
 		return lines.compactMap { line -> Statement? in
-			switch line.first {
-			case "#", ";":
-				return nil
-			case "[":
-				return .sectionHeader("something")
-			default:
-				break
-			}
-
 			let trimmedLine = line.trimmingCharacters(in: .whitespaces)
+
+			// blank
 			if trimmedLine.isEmpty {
 				return nil
+			}
+
+			// comment
+			if trimmedLine.hasPrefix("#") || trimmedLine.hasPrefix(";") {
+				return nil
+			}
+
+			if trimmedLine.hasPrefix("[") && trimmedLine.hasSuffix("]") {
+				let start = trimmedLine.index(after: trimmedLine.startIndex)
+				let end = trimmedLine.index(before: trimmedLine.endIndex)
+
+				let content = String(trimmedLine[start..<end])
+
+				return .sectionHeader(content)
 			}
 
 			let components = trimmedLine.split(separator: "=", maxSplits: 2)
