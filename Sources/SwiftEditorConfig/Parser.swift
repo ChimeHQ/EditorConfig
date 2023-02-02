@@ -3,6 +3,15 @@ import Foundation
 public enum Statement {
 	case sectionHeader(String)
 	case pair(String, String)
+
+	var string: String {
+		switch self {
+		case .sectionHeader(let value):
+			return "[\(value)]"
+		case .pair(let key, let value):
+			return "\(key) = \(value)"
+		}
+	}
 }
 
 extension Statement: Hashable {

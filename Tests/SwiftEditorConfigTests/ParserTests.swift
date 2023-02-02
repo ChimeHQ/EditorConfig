@@ -40,6 +40,5 @@ g=h
 		]
 
 		XCTAssertEqual(statements, expected)
-
 	}
 }
