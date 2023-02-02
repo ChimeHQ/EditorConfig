@@ -1,5 +1,5 @@
 import XCTest
-@testable import SwiftEditorConfig
+@testable import EditorConfig
 
 final class ParserTests: XCTestCase {
 	func testParsePairs() throws {

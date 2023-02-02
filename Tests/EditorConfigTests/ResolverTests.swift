@@ -1,5 +1,5 @@
 import XCTest
-@testable import SwiftEditorConfig
+@testable import EditorConfig
 
 final class ResolverTests: XCTestCase {
 //	override func setUp() async throws {

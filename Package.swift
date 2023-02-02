@@ -3,14 +3,14 @@
 import PackageDescription
 
 let package = Package(
-	name: "SwiftEditorConfig",
+	name: "EditorConfig",
 	products: [
-		.library(name: "SwiftEditorConfig", targets: ["SwiftEditorConfig"]),
+		.library(name: "EditorConfig", targets: ["EditorConfig"]),
 	],
 	dependencies: [
 	],
 	targets: [
-		.target(name: "SwiftEditorConfig", dependencies: []),
-		.testTarget(name: "SwiftEditorConfigTests", dependencies: ["SwiftEditorConfig"]),
+		.target(name: "EditorConfig", dependencies: []),
+		.testTarget(name: "EditorConfigTests", dependencies: ["EditorConfig"]),
 	]
 )
