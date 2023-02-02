@@ -18,7 +18,7 @@ extension Statement: Hashable {
 }
 
 public struct Parser {
-	func parse(_ input: String) throws -> [Statement] {
+	func parseStatements(_ input: String) throws -> [Statement] {
 		let lines = input.split(whereSeparator: \.isNewline)
 
 		return lines.compactMap { line -> Statement? in
@@ -53,5 +53,9 @@ public struct Parser {
 
 			return .pair(key, value)
 		}
+	}
+
+	public func parse(_ input: String) throws -> [ConfigurationSection] {
+		return []
 	}
 }

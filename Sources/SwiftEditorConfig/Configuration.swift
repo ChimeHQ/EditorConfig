@@ -46,3 +46,8 @@ extension Configuration {
 		return lines.joined(separator: "\n")
 	}
 }
+
+public struct ConfigurationSection {
+	public let pattern: String
+	public let configuration: Configuration
+}

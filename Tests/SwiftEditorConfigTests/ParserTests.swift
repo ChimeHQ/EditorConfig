@@ -1,7 +1,7 @@
 import XCTest
 @testable import SwiftEditorConfig
 
-final class SwiftEditorConfigTests: XCTestCase {
+final class ParserTests: XCTestCase {
 	func testParsePairs() throws {
 		let input = """
 a = b
@@ -10,7 +10,7 @@ e =f
 g=h
   i  =\tj\t
 """
-		let statements = try Parser().parse(input)
+		let statements = try Parser().parseStatements(input)
 
 		let expected: [Statement] = [
 			.pair("a", "b"),
@@ -30,7 +30,7 @@ g=h
 \t[c]
 [d  ]
 """
-		let statements = try Parser().parse(input)
+		let statements = try Parser().parseStatements(input)
 
 		let expected: [Statement] = [
 			.sectionHeader("a"),
