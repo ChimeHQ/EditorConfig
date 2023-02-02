@@ -11,29 +11,6 @@ public struct Configuration {
 
 extension Configuration {
 	public func render(root: Bool = true, headerPattern: String = "*") -> String {
-		var directives = [Directive]()
-
-		if let value = indentSize {
-			directives.append(.indentSize(value))
-		}
-
-		if let value = tabWidth {
-			directives.append(.tabWidth(value))
-		}
-
-		if let value = charset {
-			directives.append(.charset(value))
-		}
-
-		if let value = trimTrailingWhitespace {
-			directives.append(.trimTrailingWhitespace(value))
-		}
-
-		if let value = insertFinalNewline {
-			directives.append(.insertFinalNewline(value))
-		}
-
-
 		var lines = [String]()
 
 		if root {
@@ -42,7 +19,29 @@ extension Configuration {
 
 		lines.append(Statement.sectionHeader(headerPattern).string)
 
-		lines.append(contentsOf: directives.map({ $0.string }))
+		if let value = indentStyle {
+			lines.append(Directive.indentStyle(value).string)
+		}
+
+		if let value = indentSize {
+			lines.append(Directive.indentSize(value).string)
+		}
+
+		if let value = tabWidth {
+			lines.append(Directive.tabWidth(value).string)
+		}
+
+		if let value = charset {
+			lines.append(Directive.charset(value).string)
+		}
+
+		if let value = trimTrailingWhitespace {
+			lines.append(Directive.trimTrailingWhitespace(value).string)
+		}
+
+		if let value = insertFinalNewline {
+			lines.append(Directive.insertFinalNewline(value).string)
+		}
 
 		return lines.joined(separator: "\n")
 	}
