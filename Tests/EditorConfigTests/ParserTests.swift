@@ -41,4 +41,22 @@ g=h
 
 		XCTAssertEqual(statements, expected)
 	}
+
+	func testParseSections() throws {
+		let input = """
+[*]
+indent_style = tab
+[.]
+indent_style = space
+"""
+
+		let rules = try Parser().parse(input)
+
+		let expected = ConfigurationRules(root: false, sections: [
+			.init(pattern: "*", configuration: Configuration(indentStyle: .tab)),
+			.init(pattern: ".", configuration: Configuration(indentStyle: .space)),
+		])
+
+		XCTAssertEqual(rules, expected)
+	}
 }

@@ -55,7 +55,52 @@ public struct Parser {
 		}
 	}
 
-	public func parse(_ input: String) throws -> [ConfigurationSection] {
-		return []
+	public func parse(_ input: String) throws -> ConfigurationRules {
+		let statements = try parseStatements(input)
+
+		var rules = ConfigurationRules(root: false)
+
+		var currentPattern: String? = nil
+		var directives = [Directive]()
+
+		for statement in statements {
+			switch statement {
+			case .pair(let key, let value):
+				guard let directive = Directive(key, value) else { continue }
+
+				if case .root = directive, directives.isEmpty && rules.sections.isEmpty {
+					rules.root = true
+					break
+				}
+
+				directives.append(directive)
+			case .sectionHeader(let pattern):
+				if let current = currentPattern {
+					var config = Configuration()
+
+					directives.forEach({ config.apply($0) })
+					directives.removeAll()
+
+					let section = ConfigurationSection(pattern: current, configuration: config)
+
+					rules.sections.append(section)
+				}
+
+				currentPattern = pattern
+			}
+		}
+
+		if let current = currentPattern {
+			var config = Configuration()
+
+			directives.forEach({ config.apply($0) })
+			directives.removeAll()
+
+			let section = ConfigurationSection(pattern: current, configuration: config)
+
+			rules.sections.append(section)
+		}
+
+		return rules
 	}
 }
