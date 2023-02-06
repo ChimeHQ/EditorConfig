@@ -24,6 +24,9 @@ public final class Resolver {
 
 		while components.isEmpty == false {
 			components.removeLast()
+			if components.isEmpty {
+				break
+			}
 			
 			let path = components.joined(separator: "/")
 
