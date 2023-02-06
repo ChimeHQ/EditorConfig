@@ -5,7 +5,7 @@
 # EditorConfig
 A Swift library for working with [editorconfig][editorconfig] files
 
-- Parse and resolve editorconfigf files
+- Parse and resolve editorconfig files
 - Enforce a limitation on how far up the filesystem the resolution will scan
 - Render `Configuration` structs back into the editorconfig format
 
