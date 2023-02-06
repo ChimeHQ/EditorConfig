@@ -55,16 +55,15 @@ public final class Resolver {
 		let urls = try parentDirectories(for: url)
 		let pathComponents = url.pathComponents
 
-		let possibleConfigURLs = urls.map { $0.appendingPathComponent(".editorconfig", isDirectory: false) }
-		let pairs = zip(possibleConfigURLs, possibleConfigURLs.indices)
+		let possibleConfigURLs = urls.map { $0.appendingPathComponent(".editorconfig", isDirectory: false) }.reversed()
 
 		var config = Configuration()
 
-		for (configURL, index) in pairs {
+		for configURL in possibleConfigURLs {
 			guard FileManager.default.isReadableFile(atPath: configURL.path) else { continue }
 
-			let componentIndex = pathComponents.count - (index + 1)
-			let relativeComponents = pathComponents.suffix(from: componentIndex)
+			let configComponentCount = configURL.pathComponents.count - 1
+			let relativeComponents = pathComponents.suffix(from: configComponentCount)
 			let relativePath = relativeComponents.joined(separator: "/")
 
 			let content = try configContent(at: configURL)

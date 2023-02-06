@@ -5,6 +5,7 @@ public struct Configuration: Hashable {
 	public var indentSize: Int?
 	public var tabWidth: Int?
 	public var charset: Charset?
+	public var endOfLine: LineEnding?
 	public var trimTrailingWhitespace: Bool?
 	public var insertFinalNewline: Bool?
 	public var maxLineLength: MaxLineLength?
@@ -13,6 +14,7 @@ public struct Configuration: Hashable {
 				indentSize: Int? = nil,
 				tabWidth: Int? = nil,
 				charset: Charset? = nil,
+				endOfLine: LineEnding? = nil,
 				trimTrailingWhitespace: Bool? = nil,
 				insertFinalNewline: Bool? = nil,
 				maxLineLength: MaxLineLength? = nil) {
@@ -39,6 +41,8 @@ public struct Configuration: Hashable {
 			self.tabWidth = value
 		case .charset(let value):
 			self.charset = value
+		case .endOfLine(let value):
+			self.endOfLine = value
 		case .indentSize(let value):
 			self.indentSize = value
 		case .indentStyle(let value):

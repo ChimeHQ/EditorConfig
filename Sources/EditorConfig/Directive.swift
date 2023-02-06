@@ -42,6 +42,7 @@ public enum Directive {
 	case indentSize(Int)
 	case tabWidth(Int)
 	case charset(Charset)
+	case endOfLine(LineEnding)
 	case trimTrailingWhitespace(Bool)
 	case insertFinalNewline(Bool)
 	case maxLineLength(MaxLineLength)
@@ -55,11 +56,38 @@ public enum Directive {
 
 			self = .root
 		case .indentStyle:
-			guard let value = IndentStyle(rawValue: valueString) else { return nil}
+			guard let value = IndentStyle(rawValue: valueString) else { return nil }
 
 			self = .indentStyle(value)
-		default:
-			return nil
+		case .indentSize:
+			guard let value = Int(valueString) else { return nil }
+
+			self = .indentSize(value)
+		case .tabWidth:
+			guard let value = Int(valueString) else { return nil }
+
+			self = .tabWidth(value)
+		case .charset:
+			guard let value = Charset(rawValue: valueString) else { return nil }
+
+			self = .charset(value)
+		case .trimTrailingWhitespace:
+			self = .trimTrailingWhitespace(valueString == "true")
+		case .insertFinalNewline:
+			self = .insertFinalNewline(valueString == "true")
+		case .maxLineLength:
+			if valueString == "off" {
+				self = .maxLineLength(.off)
+				return
+			}
+
+			guard let value = Int(valueString) else { return nil }
+
+			self = .maxLineLength(.value(value))
+		case .endOfLine:
+			guard let value = LineEnding(rawValue: valueString) else { return nil }
+
+			self = .endOfLine(value)
 		}
 	}
 
@@ -75,6 +103,8 @@ public enum Directive {
 			return .pair(SupportedKeys.tabWidth.rawValue, "\(width)")
 		case .charset(let set):
 			return .pair(SupportedKeys.charset.rawValue, set.rawValue)
+		case .endOfLine(let ending):
+			return .pair(SupportedKeys.endOfLine.rawValue, ending.rawValue)
 		case .trimTrailingWhitespace(let value):
 			return .pair(SupportedKeys.trimTrailingWhitespace.rawValue, value ? "true" : "false")
 		case .insertFinalNewline(let value):
