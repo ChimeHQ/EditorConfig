@@ -46,6 +46,10 @@ final class ResolverTests: XCTestCase {
 		XCTAssertFalse(try resolver.matches("abc.js", pattern: "lib/**.js"))
 		XCTAssertFalse(try resolver.matches("lid/abc.js", pattern: "lib/**.js"))
 		XCTAssertFalse(try resolver.matches("libabc.js", pattern: "lib/**.js"))
+
+		XCTAssertTrue(try resolver.matches("abc.js", pattern: "[ab]bc.js"))
+		XCTAssertTrue(try resolver.matches("bbc.js", pattern: "[ab]bc.js"))
+		XCTAssertFalse(try resolver.matches("cbc.js", pattern: "[ab]bc.js"))
 	}
 
 	func testResolveSingleNonMatchingFile() throws {
