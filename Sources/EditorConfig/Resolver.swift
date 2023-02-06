@@ -3,49 +3,74 @@ import Foundation
 public final class Resolver {
 	enum Failure: Error {
 		case unsupportedURL(URL)
+		case noParentDirectories(URL)
 	}
 
-	let rootURL: URL?
+	let limitURL: URL?
+	private var contentCache = [URL: ConfigurationFileContent]()
 
-	public init(rootURL: URL? = nil) {
-		self.rootURL = rootURL
+	public init(limitURL: URL? = nil) {
+		self.limitURL = limitURL
 	}
 
-	public func effectiveRules(for url: URL) throws -> ConfigurationFileContent {
+	private func parentDirectories(for url: URL) throws -> [URL] {
+		guard url.isFileURL else {
+			throw Failure.unsupportedURL(url)
+		}
+		
+		var components = url.pathComponents
+
+		var urls = [URL]()
+
+		while components.isEmpty == false {
+			components.removeLast()
+			
+			let path = components.joined(separator: "/")
+
+			let url = URL(fileURLWithPath: path, isDirectory: true)
+
+			if url == limitURL {
+				break
+			}
+
+			urls.append(url)
+		}
+
+		return urls
+	}
+
+	private func configContent(at url: URL) throws -> ConfigurationFileContent {
+		let text = try String(contentsOf: url)
+		return try Parser().parse(text)
+	}
+
+	public func configuration(for url: URL) throws -> Configuration {
 		guard url.isFileURL else {
 			throw Failure.unsupportedURL(url)
 		}
 
-		var components = url.pathComponents
-		var sections = [ConfigurationSection]()
+		let urls = try parentDirectories(for: url)
+		let pathComponents = url.pathComponents
 
-		while components.isEmpty == false {
-			components.removeLast()
+		let possibleConfigURLs = urls.map { $0.appendingPathComponent(".editorconfig", isDirectory: false) }
+		let pairs = zip(possibleConfigURLs, possibleConfigURLs.indices)
 
-			let path = components.joined(separator: "/") + "/.editorconfig"
+		var config = Configuration()
 
-			let configURL = URL(fileURLWithPath: path, isDirectory: false)
-
+		for (configURL, index) in pairs {
 			guard FileManager.default.isReadableFile(atPath: configURL.path) else { continue }
 
-			let content = try String(contentsOf: configURL)
+			let componentIndex = pathComponents.count - (index + 1)
+			let relativeComponents = pathComponents.suffix(from: componentIndex)
+			let relativePath = relativeComponents.joined(separator: "/")
 
-			let rules = try Parser().parse(content)
+			let content = try configContent(at: configURL)
+			let effectiveSections = try content.sections.filter({ try matches(relativePath, pattern: $0.pattern) })
 
-			sections.append(contentsOf: rules.sections)
-
-			if rules.root {
-				break
-			}
+			effectiveSections.forEach({ config.apply($0.configuration) })
 		}
 
-		return ConfigurationFileContent(root: true, sections: sections)
-	}
-
-	func configuration(for url: URL) throws -> Configuration {
-		let rules = try effectiveRules(for: url)
-
-		return rules.sections.first?.configuration ?? Configuration()
+		return config
 	}
 
 	func matches(_ name: String, pattern: String) throws -> Bool {

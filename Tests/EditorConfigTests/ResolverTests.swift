@@ -47,4 +47,22 @@ final class ResolverTests: XCTestCase {
 		XCTAssertFalse(try resolver.matches("lid/abc.js", pattern: "lib/**.js"))
 		XCTAssertFalse(try resolver.matches("libabc.js", pattern: "lib/**.js"))
 	}
+
+	func testResolveSingleNonMatchingFile() throws {
+		let rootConfig = Configuration(indentStyle: .tab)
+
+		let configURL = tmpDir.appendingPathComponent(".editorconfig", isDirectory: false)
+
+		try rootConfig
+			.render(headerPattern: "*.js")
+			.write(to: configURL, atomically: true, encoding: .utf8)
+
+		let resolver = Resolver()
+
+		let fileURL = tmpDir.appendingPathComponent("somefile.py")
+
+		let configuration = try resolver.configuration(for: fileURL)
+
+		XCTAssertEqual(configuration, Configuration())
+	}
 }

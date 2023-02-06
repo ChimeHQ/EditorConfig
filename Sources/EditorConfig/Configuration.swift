@@ -50,7 +50,36 @@ public struct Configuration: Hashable {
 		case .maxLineLength(let value):
 			self.maxLineLength = value
 		}
+	}
 
+	public mutating func apply(_ config: Configuration) {
+		if let value = config.indentStyle {
+			self.indentStyle = value
+		}
+
+		if let value = config.indentSize {
+			self.indentSize = value
+		}
+
+		if let value = config.tabWidth {
+			self.tabWidth = value
+		}
+
+		if let value = config.charset {
+			self.charset = value
+		}
+
+		if let value = config.insertFinalNewline {
+			self.insertFinalNewline = value
+		}
+
+		if let value = config.trimTrailingWhitespace {
+			self.trimTrailingWhitespace = value
+		}
+
+		if let value = config.maxLineLength {
+			self.maxLineLength = value
+		}
 	}
 }
 
