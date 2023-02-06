@@ -11,7 +11,7 @@ public final class Resolver {
 		self.rootURL = rootURL
 	}
 
-	func effectiveRules(for url: URL) throws -> ConfigurationRules {
+	public func effectiveRules(for url: URL) throws -> ConfigurationFileContent {
 		guard url.isFileURL else {
 			throw Failure.unsupportedURL(url)
 		}
@@ -39,12 +39,32 @@ public final class Resolver {
 			}
 		}
 
-		return ConfigurationRules(root: true, sections: sections)
+		return ConfigurationFileContent(root: true, sections: sections)
 	}
 
 	func configuration(for url: URL) throws -> Configuration {
 		let rules = try effectiveRules(for: url)
 
 		return rules.sections.first?.configuration ?? Configuration()
+	}
+
+	func matches(_ name: String, pattern: String) throws -> Bool {
+		let value = name.withCString { nameCStr in
+			pattern.withCString { patternCStr in
+				fnmatch(patternCStr, nameCStr, 0)
+			}
+		}
+
+		if value == 0 {
+			return true
+		}
+
+		if value == FNM_NOMATCH {
+			return false
+		}
+
+		// something else is wrong
+		
+		return false
 	}
 }

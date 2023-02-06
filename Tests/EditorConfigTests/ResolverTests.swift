@@ -27,4 +27,24 @@ final class ResolverTests: XCTestCase {
 
 		XCTAssertEqual(configuration, rootConfig)
 	}
+
+	func testPatchnameMatching() throws {
+		let resolver = Resolver()
+
+		XCTAssertTrue(try resolver.matches("abc", pattern: "*"))
+
+		XCTAssertTrue(try resolver.matches("abc.py", pattern: "*.py"))
+		XCTAssertFalse(try resolver.matches("abc.js", pattern: "*.py"))
+
+		XCTAssertTrue(try resolver.matches("Makefile", pattern: "Makefile"))
+		XCTAssertFalse(try resolver.matches("Madefile", pattern: "Makefile"))
+		XCTAssertFalse(try resolver.matches("abc/Mafefile", pattern: "Makefile"))
+
+		XCTAssertTrue(try resolver.matches("lib/abc.js", pattern: "lib/**.js"))
+		XCTAssertTrue(try resolver.matches("lib/a/bc.js", pattern: "lib/**.js"))
+		XCTAssertFalse(try resolver.matches("lib/abc.py", pattern: "lib/**.js"))
+		XCTAssertFalse(try resolver.matches("abc.js", pattern: "lib/**.js"))
+		XCTAssertFalse(try resolver.matches("lid/abc.js", pattern: "lib/**.js"))
+		XCTAssertFalse(try resolver.matches("libabc.js", pattern: "lib/**.js"))
+	}
 }

@@ -95,9 +95,22 @@ extension Configuration {
 public struct ConfigurationSection: Hashable {
 	public var pattern: String
 	public var configuration: Configuration
+
+	public init(pattern: String, configuration: Configuration) {
+		self.pattern = pattern
+		self.configuration = configuration
+	}
+
+	public init(pattern: String, directives: [Directive]) {
+		var config = Configuration()
+
+		directives.forEach({ config.apply($0) })
+
+		self.init(pattern: pattern, configuration: config)
+	}
 }
 
-public struct ConfigurationRules: Hashable {
+public struct ConfigurationFileContent: Hashable {
 	public var root: Bool
 	public var sections: [ConfigurationSection]
 

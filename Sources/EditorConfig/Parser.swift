@@ -55,10 +55,12 @@ public struct Parser {
 		}
 	}
 
-	public func parse(_ input: String) throws -> ConfigurationRules {
-		let statements = try parseStatements(input)
+	public func parse(_ input: String) throws -> ConfigurationFileContent {
+		// add one finally, fake section header to make sure to commit the
+		// last list of directives
+		let statements = try parseStatements(input) + [.sectionHeader("")]
 
-		var rules = ConfigurationRules(root: false)
+		var rules = ConfigurationFileContent(root: false)
 
 		var currentPattern: String? = nil
 		var directives = [Directive]()
@@ -76,29 +78,14 @@ public struct Parser {
 				directives.append(directive)
 			case .sectionHeader(let pattern):
 				if let current = currentPattern {
-					var config = Configuration()
+					let section = ConfigurationSection(pattern: current, directives: directives)
 
-					directives.forEach({ config.apply($0) })
 					directives.removeAll()
-
-					let section = ConfigurationSection(pattern: current, configuration: config)
-
 					rules.sections.append(section)
 				}
 
 				currentPattern = pattern
 			}
-		}
-
-		if let current = currentPattern {
-			var config = Configuration()
-
-			directives.forEach({ config.apply($0) })
-			directives.removeAll()
-
-			let section = ConfigurationSection(pattern: current, configuration: config)
-
-			rules.sections.append(section)
 		}
 
 		return rules

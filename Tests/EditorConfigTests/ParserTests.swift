@@ -52,7 +52,7 @@ indent_style = space
 
 		let rules = try Parser().parse(input)
 
-		let expected = ConfigurationRules(root: false, sections: [
+		let expected = ConfigurationFileContent(root: false, sections: [
 			.init(pattern: "*", configuration: Configuration(indentStyle: .tab)),
 			.init(pattern: ".", configuration: Configuration(indentStyle: .space)),
 		])
