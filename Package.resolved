@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "GlobPattern",
+        "repositoryURL": "https://github.com/ChimeHQ/GlobPattern",
+        "state": {
+          "branch": "main",
+          "revision": "463bf8800205ba6746307fbc9c4aa25c9fdae66d",
+          "version": null
+        }
+      }
+    ]
+  },
+  "version": 1
+}

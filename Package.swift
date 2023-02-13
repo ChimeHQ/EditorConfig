@@ -9,9 +9,10 @@ let package = Package(
 		.library(name: "EditorConfig", targets: ["EditorConfig"]),
 	],
 	dependencies: [
+		.package(url: "https://github.com/ChimeHQ/GlobPattern", branch: "main"),
 	],
 	targets: [
-		.target(name: "EditorConfig", dependencies: []),
+		.target(name: "EditorConfig", dependencies: ["GlobPattern"]),
 		.testTarget(name: "EditorConfigTests", dependencies: ["EditorConfig"]),
 	]
 )
