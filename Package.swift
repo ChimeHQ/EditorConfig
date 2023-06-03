@@ -9,7 +9,7 @@ let package = Package(
 		.library(name: "EditorConfig", targets: ["EditorConfig"]),
 	],
 	dependencies: [
-		.package(url: "https://github.com/ChimeHQ/GlobPattern", branch: "main"),
+		.package(url: "https://github.com/ChimeHQ/GlobPattern", from: "0.1.0"),
 	],
 	targets: [
 		.target(name: "EditorConfig", dependencies: ["GlobPattern"]),

@@ -5,9 +5,9 @@
         "package": "GlobPattern",
         "repositoryURL": "https://github.com/ChimeHQ/GlobPattern",
         "state": {
-          "branch": "main",
-          "revision": "463bf8800205ba6746307fbc9c4aa25c9fdae66d",
-          "version": null
+          "branch": null,
+          "revision": "93c5308b13980265b77c2c652a674ef882aa1ed9",
+          "version": "0.1.0"
         }
       }
     ]
