@@ -1,5 +1,5 @@
 import Foundation
-import GlobPattern
+import Glob
 
 public final class Resolver {
 	enum Failure: Error {
@@ -77,7 +77,7 @@ public final class Resolver {
 	}
 
 	func matches(_ name: String, pattern: String) throws -> Bool {
-		let patternMatcher = try Glob.Pattern(pattern, mode: .editorconfig)
+		let patternMatcher = try Glob.Pattern(pattern, options: .default)
 
 		return patternMatcher.match(name)
 	}

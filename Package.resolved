@@ -1,16 +1,13 @@
 {
-  "object": {
-    "pins": [
-      {
-        "package": "GlobPattern",
-        "repositoryURL": "https://github.com/ChimeHQ/GlobPattern",
-        "state": {
-          "branch": null,
-          "revision": "93c5308b13980265b77c2c652a674ef882aa1ed9",
-          "version": "0.1.0"
-        }
+  "pins" : [
+    {
+      "identity" : "swift-glob",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/davbeck/swift-glob",
+      "state" : {
+        "revision" : "6b93163b2db5ac639eeb274c473f16f5a6dd8a95"
       }
-    ]
-  },
-  "version": 1
+    }
+  ],
+  "version" : 2
 }
