@@ -14,6 +14,14 @@ A Swift library for working with [editorconfig][editorconfig] files
 
 As of right now, this library does not handle curly brace expansion inside patterns.
 
+## Installation
+
+```swift
+dependencies: [
+    .package(url: "https://github.com/ChimeHQ/EditorConfig", from: "0.1.0")
+],
+```
+
 ## Usage
 
 ```swift
